@@ -33,6 +33,12 @@
                 <!-- Rows will be added here dynamically by JavaScript -->
             </tbody>
         </table>
+
+        <div class="pagination">
+            <button id="prev-btn" onclick="prevPage()">Previous</button>
+            <span id="page-info"></span>
+            <button id="next-btn" onclick="nextPage()">Next</button>
+        </div>
      </div>
      <script>
         const rowsPerPage = 10;
@@ -74,5 +80,18 @@
             document.getElementById('page-info').innerText = `Page ${currentPage} of ${Math.ceil(filteredRows.length / rowsPerPage)}`;
             document.getElementById('prev-btn').disabled = currentPage === 1;
             document.getElementById('next-btn').disabled = currentPage === Math.ceil(filteredRows.length / rowsPerPage);
+        }
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayTable();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < Math.ceil(rows.length / rowsPerPage)) {
+                currentPage++;
+                displayTable();
+            }
         }
     </script>
