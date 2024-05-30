@@ -18,6 +18,7 @@
     </header>
     <div class="table-container">
         <div class="addBook" style="padding-top: 2rem; display: flex; justify-content: space-between;">
+            <input type="text" id="searchInput" placeholder="Search books..." onkeyup="searchBooks()">
             <button class="addButton" onclick="openPopup()">Add Book</button>
         </div>
         <table>
@@ -162,6 +163,18 @@
             document.getElementById('copies').value = book.copies;
             document.getElementById('bookIndex').value = index;
             openPopup();
+        }
+        function searchBooks() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filteredRows = rows.filter(row =>
+                row.title.toLowerCase().includes(query) ||
+                row.author.toLowerCase().includes(query) ||
+                row.publisher.toLowerCase().includes(query) ||
+                row.year.toString().includes(query) ||
+                row.genre.toLowerCase().includes(query) ||
+                row.copies.toString().includes(query)
+            );
+            displayTable(filteredRows);
         }
 
         function deleteBook(index) {
