@@ -1,0 +1,98 @@
+thead {
+    background-color: #009879;
+    color: #ffffff;
+}
+
+thead th {
+    padding: 12px 15px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+tfoot th {
+    padding: 12px 15px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+th, td {
+    padding: 12px 15px;
+}
+td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+th.action-column, td.action-column {
+    width: 100px; /* Adjust this value as needed */
+}
+
+td .fas {
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: none;
+    background-color: #009879;
+    color: white;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    margin: 0 10px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px 0;
+    background-color: #009879;
+    color: white;
+    border-radius: 7px;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    z-index: 10;
+    padding: 20px;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+}
