@@ -17,6 +17,7 @@
         </nav>
     </header>
     <div class="table-container">
+        
         <table>
             <thead>
                 <tr>
@@ -94,4 +95,23 @@
                 displayTable();
             }
         }
+
+        function editBook(index) {
+            const book = rows[index];
+            document.getElementById('title').value = book.title;
+            document.getElementById('author').value = book.author;
+            document.getElementById('publisher').value = book.publisher;
+            document.getElementById('year').value = book.year;
+            document.getElementById('genre').value = book.genre;
+            document.getElementById('copies').value = book.copies;
+            document.getElementById('bookIndex').value = index;
+            openPopup();
+        }
+
+        function deleteBook(index) {
+            rows.splice(index, 1);
+            displayTable();
+        }
+
+        displayTable();
     </script>
