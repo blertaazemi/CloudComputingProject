@@ -175,3 +175,63 @@ footer {
     max-width: 500px;
     border-radius: 10px;
 }
+
+.popup h2 {
+    margin-top: 0;
+}
+
+.popup form {
+    display: flex;
+    flex-direction: column;
+}
+
+.popup form label {
+    margin: 10px 0 5px;
+}
+
+.popup form input, .popup form button {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 7px;
+}
+
+.popup form button {
+    background-color: #009879;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.popup form button:hover {
+    background-color: #007a63;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9;
+}
+
+.popup .buttons {
+    display: flex;
+    justify-content:space-between;
+}
+
+td .fas {
+    cursor: pointer;
+    margin-left: 10px;
+    float: right;
+}
+
+td .fas.fa-edit {
+    color: #009879;
+}
+
+td .fas.fa-trash {
+    color: red;
+}
