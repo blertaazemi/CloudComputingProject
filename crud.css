@@ -1,3 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.header {
+    background-color: #009879;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 7px;
+}
+
+.header h2 {
+    color: white;
+    margin: 0;
+}
+
+.header nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.header nav ul li {
+    margin: 0 15px;
+}
+
+.header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.table-container {
+    width: 100%;
+    margin: 0 auto;
+    overflow-x: auto;
+}
+
+.table-container .addBook {
+    display: flex;
+    justify-content: space-between;
+}
+
+.table-container .addBook input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 200px;
+}
+
+.table-container .addBook .addButton {
+    background-color: #009879;
+    color:#ffffff;
+    width: 90px;
+    height: 45px;
+    font-size: 16px;
+    border: 1px #009879 solid;
+    border-radius: 7px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 18px;
+    text-align: left;
+    background-color: #ffffff;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
 thead {
     background-color: #009879;
     color: #ffffff;
