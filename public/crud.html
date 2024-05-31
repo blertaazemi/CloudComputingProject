@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books Table</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="crud.css">
+</head>
+<body>
+    <header class="header">
+        <h2>Crud</h2>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="table-container">
+        <div class="addBook" style="padding-top: 2rem; display: flex; justify-content: space-between;">
+            <input type="text" id="searchInput" placeholder="Search books..." onkeyup="searchBooks()">
+            <button class="addButton" onclick="openPopup()">Add Book</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Publisher</th>
+                    <th>Year</th>
+                    <th>Genre</th>
+                    <th>Copies</th>
+                    <th class="action-column">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Rows will be added here dynamically by JavaScript -->
+            </tbody>
+        </table>
+        <div class="pagination">
+            <button id="prev-btn" onclick="prevPage()">Previous</button>
+            <span id="page-info"></span>
+            <button id="next-btn" onclick="nextPage()">Next</button>
+        </div>
+    </div>
+
+    <div class="popup" id="popupForm">
+        <h2>Add/Edit Book</h2>
+        <form id="bookForm">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+            <label for="author">Author</label>
+            <input type="text" id="author" name="author" required>
+            <label for="publisher">Publisher</label>
+            <input type="text" id="publisher" name="publisher" required>
+            <label for="year">Year</label>
+            <input type="number" id="year" name="year" required>
+            <label for="genre">Genre</label>
+            <input type="text" id="genre" name="genre" required>
+            <label for="copies">Copies</label>
+            <input type="number" id="copies" name="copies" required>
+            <input type="hidden" id="originalTitle" name="originalTitle">
+            <div class="buttons">
+                <button type="button" onclick="closePopup()">Close</button>
+                <button type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+    <div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+    <script>
+        const rowsPerPage = 10;
+        let currentPage = 1;
+        let rows = [];
+
+        async function fetchBooks() {
+            const response = await fetch('/books');
+            const data = await response.json();
+            rows = data;
+            displayTable();
+        }
+
+        function displayTable(filteredRows = rows) {
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = '';
+            filteredRows.slice(start, end).forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.Title}</td>
+                    <td>${row.Author}</td>
+                    <td>${row.Publisher}</td>
+                    <td>${row.YearPublished}</td>
+                    <td>${row.Genre}</td>
+                    <td>${row.CopiesAvailable}</td>
+                    <td class="action-column">
+                        <button onclick="editBook(${index})"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteBook('${row.Title}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+            document.getElementById('page-info').innerText = `Page ${currentPage} of ${Math.ceil(filteredRows.length / rowsPerPage)}`;
+            document.getElementById('prev-btn').disabled = currentPage === 1;
+            document.getElementById('next-btn').disabled = currentPage === Math.ceil(filteredRows.length / rowsPerPage);
+        }
+
+        function editBook(index) {
+            const book = rows[index];
+            document.getElementById('title').value = book.Title;
+            document.getElementById('author').value = book.Author;
+            document.getElementById('publisher').value = book.Publisher;
+            document.getElementById('year').value = book.YearPublished;
+            document.getElementById('genre').value = book.Genre;
+            document.getElementById('copies').value = book.CopiesAvailable;
+            document.getElementById('originalTitle').value = book.Title; // Hidden field to send original title for identification
+            openPopup();
+        }
+
+        async function deleteBook(title) {
+            if (confirm("Are you sure you want to delete this book?")) {
+                const response = await fetch(`/books/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `title=${encodeURIComponent(title)}`
+                });
+                if (response.ok) {
+                    fetchBooks(); // Refresh the list after deletion
+                } else {
+                    alert("Failed to delete the book.");
+                }
+            }
+        }
+
+        function openPopup() {
+            document.getElementById('popupForm').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popupForm').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('bookForm').reset();
+            document.getElementById('originalTitle').value = '';
+        }
+
+        function searchBooks() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const filteredRows = rows.filter(row => 
+        row.Title.toLowerCase().includes(query) ||
+        row.Author.toLowerCase().includes(query) ||
+        row.Publisher.toLowerCase().includes(query) ||
+        row.YearPublished.toString().includes(query) ||  
+        row.Genre.toLowerCase().includes(query) ||
+        row.CopiesAvailable.toString().includes(query) 
+    );
+    displayTable(filteredRows);
+}
+
+
+        
+        fetchBooks();
+
+        document.getElementById('bookForm').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const originalTitle = document.getElementById('originalTitle').value;
+    const formData = new URLSearchParams();
+    formData.append('title', document.getElementById('title').value);
+    formData.append('author', document.getElementById('author').value);
+    formData.append('publisher', document.getElementById('publisher').value);
+    formData.append('year', document.getElementById('year').value);
+    formData.append('genre', document.getElementById('genre').value);
+    formData.append('copies', document.getElementById('copies').value);
+
+    if (originalTitle) {
+        formData.append('originalTitle', originalTitle); // Add original title if present (for edits)
+    }
+
+    const endpoint = originalTitle ? '/books/edit' : '/books';
+    const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData
+    });
+
+    if (response.ok) {
+        fetchBooks(); // Refresh the list after successful add/edit
+        closePopup(); // Close the popup form
+    } else {
+        alert('Failed to save the book. Please check the server logs.');
+    }
+});
+
+    </script>
+</body>
+<footer>
+    <footer>
+        <p>&copy; 2024 Book Library. All rights reserved.</p>
+    </footer>
+</footer>
+</html>
